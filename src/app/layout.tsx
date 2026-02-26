@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar"; // <-- Импортируем наш Sidebar
+import Sidebar from "@/components/Sidebar";
+import { FinanceProvider } from "@/context/FinanceContext";
 
+// Объявление шрифтов, которое потерялось
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,14 +27,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen bg-white dark:bg-black`}>
-        {/* Добавляем Sidebar слева */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen bg-[#F0F2F5]`}>
+        
+        {/* Боковое меню */}
         <Sidebar />
         
-        {/* Обертка для основного контента */}
-        <div className="flex-1 flex flex-col min-w-0">
-          {children}
-        </div>
+        {/* Оборачиваем контент в FinanceProvider для доступа к кассам */}
+        <FinanceProvider>
+          <div className="flex-1 flex flex-col min-w-0">
+            {children}
+          </div>
+        </FinanceProvider>
+        
       </body>
     </html>
   );
