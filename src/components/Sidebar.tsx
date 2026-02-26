@@ -1,22 +1,39 @@
+'use client';
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { LogOut, Home, Settings, PieChart } from "lucide-react";
+import { Button } from "@heroui/react";
 
 export default function Sidebar() {
+  const { isLoggedIn, logout } = useAuth();
+
+  // Это решит твою проблему: если не залогинен, сайдбара физически нет в DOM
+  if (!isLoggedIn) return null;
+
   return (
-    <aside className="w-64 border-r border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-black flex flex-col h-screen sticky top-0 p-6">
-      <div className="font-bold text-2xl mb-8 text-black dark:text-white">
-        FinDodo
-      </div>
-      <nav className="flex flex-col gap-4 text-zinc-600 dark:text-zinc-400">
-        <Link href="/" className="hover:text-black dark:hover:text-white transition-colors">
-          Главная
+    <aside className="w-72 border-r border-slate-200 bg-white flex flex-col h-screen sticky top-0 p-8 shadow-sm z-50">
+      <div className="font-black text-3xl mb-12 text-indigo-600 tracking-tighter">FinDodo</div>
+      
+      <nav className="flex flex-col gap-2 flex-1">
+        <Link href="/" className="flex items-center gap-4 p-4 rounded-2xl font-bold text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+          <Home size={20}/> Главная
         </Link>
-        <Link href="/dashboard" className="hover:text-black dark:hover:text-white transition-colors">
-          Дашборд
+        <Link href="/dashboard" className="flex items-center gap-4 p-4 rounded-2xl font-bold text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+          <PieChart size={20}/> Аналитика
         </Link>
-        <Link href="/settings" className="hover:text-black dark:hover:text-white transition-colors">
-          Настройки
+        <Link href="/settings" className="flex items-center gap-4 p-4 rounded-2xl font-bold text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+          <Settings size={20}/> Настройки
         </Link>
       </nav>
+
+      <Button 
+        variant="flat" color="danger" 
+        className="rounded-2xl font-bold mt-auto h-12"
+        startContent={<LogOut size={18}/>}
+        onPress={logout}
+      >
+        Выйти
+      </Button>
     </aside>
   );
 }
